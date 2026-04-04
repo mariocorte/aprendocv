@@ -5,33 +5,61 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bienvenida</title>
     <style>
+        :root {
+            --fondo-base: #0f0f10;
+            --texto-principal: #ffffff;
+            --texto-secundario: #f3f4f6;
+            --sombra: rgba(0, 0, 0, 0.45);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
         body {
             margin: 0;
             min-height: 100vh;
+            font-family: Arial, sans-serif;
+            color: var(--texto-principal);
+            background-color: var(--fondo-base);
+            background-image:
+                linear-gradient(var(--sombra), var(--sombra)),
+                url('{{ asset('images/backgrounds/bienvenida.png') }}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
             display: grid;
             place-items: center;
-            background-color: #ffffff;
-            font-family: Arial, sans-serif;
+            padding: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                background-image:
+                    linear-gradient(var(--sombra), var(--sombra)),
+                    url('{{ asset('images/backgrounds/bienvenidasm.png') }}');
+            }
         }
 
         .container {
+            width: min(92vw, 680px);
             text-align: center;
-            background-color: #ffffff;
             padding: 2rem;
-            border: 1px solid #e5e7eb;
-            border-radius: 0.75rem;
+            border-radius: 1rem;
+            background-color: rgba(0, 0, 0, 0.42);
+            backdrop-filter: blur(1px);
         }
 
         h1 {
             margin: 0 0 1rem;
-            color: #ff0000;
-            font-size: 2rem;
+            color: #ff4d4d;
+            font-size: clamp(1.9rem, 3vw, 2.5rem);
         }
 
         p {
             margin: 0;
-            color: #111827;
-            font-size: 1.1rem;
+            color: var(--texto-secundario);
+            font-size: clamp(1rem, 1.5vw, 1.2rem);
         }
     </style>
 </head>
