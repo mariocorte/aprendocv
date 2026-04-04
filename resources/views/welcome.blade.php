@@ -28,9 +28,6 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            display: grid;
-            place-items: center;
-            padding: 1.5rem;
         }
 
         @media (max-width: 768px) {
@@ -41,32 +38,46 @@
             }
         }
 
-        .container {
-            width: min(92vw, 680px);
+        .pie-pagina {
+            position: fixed;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            padding: 1rem;
             text-align: center;
-            padding: 2rem;
-            border-radius: 1rem;
-            background-color: rgba(0, 0, 0, 0.42);
-            backdrop-filter: blur(1px);
-        }
-
-        h1 {
-            margin: 0 0 1rem;
-            color: #ff4d4d;
-            font-size: clamp(1.9rem, 3vw, 2.5rem);
-        }
-
-        p {
-            margin: 0;
             color: var(--texto-secundario);
-            font-size: clamp(1rem, 1.5vw, 1.2rem);
+            background-color: rgba(0, 0, 0, 0.55);
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            font-size: 0.95rem;
+            letter-spacing: 0.015em;
+        }
+
+        .estado-ok {
+            color: #86efac;
+        }
+
+        .estado-error {
+            color: #fca5a5;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Bienvenido Mario</h1>
-        <p>Base de datos conectada: {{ \Illuminate\Support\Facades\DB::connection()->getDatabaseName() ?? 'No disponible' }}</p>
-    </div>
+    @php
+        $conexionExitosa = true;
+
+        try {
+            \Illuminate\Support\Facades\DB::connection()->getPdo();
+        } catch (\Throwable $e) {
+            $conexionExitosa = false;
+        }
+    @endphp
+
+    <footer class="pie-pagina">
+        @if ($conexionExitosa)
+            <span class="estado-ok">Conexión a la base exitosa.</span>
+        @else
+            <span class="estado-error">Error de conexión a la base de datos.</span>
+        @endif
+    </footer>
 </body>
 </html>
