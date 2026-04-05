@@ -59,16 +59,25 @@
         .estado-error {
             color: #fca5a5;
         }
+
+        .detalle-error {
+            margin-top: 0.35rem;
+            display: block;
+            font-size: 0.85rem;
+            color: #fecaca;
+        }
     </style>
 </head>
 <body>
     @php
         $conexionExitosa = true;
+        $errorConexion = null;
 
         try {
             \Illuminate\Support\Facades\DB::connection()->getPdo();
         } catch (\Throwable $e) {
             $conexionExitosa = false;
+            $errorConexion = $e->getMessage();
         }
     @endphp
 
@@ -77,6 +86,7 @@
             <span class="estado-ok">Conexión a la base exitosa.</span>
         @else
             <span class="estado-error">Error de conexión a la base de datos.</span>
+            <span class="detalle-error">{{ $errorConexion }}</span>
         @endif
     </footer>
 </body>
