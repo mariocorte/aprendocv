@@ -2,6 +2,8 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Route;
 
@@ -24,6 +26,12 @@ Route::post('/login', function (Request $request) {
         ->first();
 
     if (! $usuario || ! Hash::check($credenciales['password'], $usuario->hash_contrasena)) {
+    $usuario = User::query()
+        ->where('email', $credenciales['usuario'])
+        ->orWhere('name', $credenciales['usuario'])
+        ->first();
+
+    if (! $usuario || ! Hash::check($credenciales['password'], $usuario->password)) {
         return back()
             ->withErrors(['usuario' => 'Usuario o contraseña incorrectos.'])
             ->withInput($request->only('usuario'));
@@ -32,4 +40,5 @@ Route::post('/login', function (Request $request) {
     $nombreCompleto = trim(sprintf('%s %s', $usuario->nombres, $usuario->apellidos));
 
     return view('welcome', ['nombreCompleto' => $nombreCompleto]);
+    return view('welcome', ['nombreCompleto' => $usuario->name]);
 });
