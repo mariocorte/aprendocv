@@ -1,5 +1,7 @@
 <?php
 
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -18,6 +20,12 @@ Route::post('/login', function (Request $request) {
         'password.required' => 'La contraseña es obligatoria.',
     ]);
 
+    $usuario = DB::table('usuarios')
+        ->where('correo_electronico', $credenciales['usuario'])
+        ->orWhere('numero_documento', $credenciales['usuario'])
+        ->first();
+
+    if (! $usuario || ! Hash::check($credenciales['password'], $usuario->hash_contrasena)) {
     $usuario = User::query()
         ->where('email', $credenciales['usuario'])
         ->orWhere('name', $credenciales['usuario'])
@@ -29,5 +37,8 @@ Route::post('/login', function (Request $request) {
             ->withInput($request->only('usuario'));
     }
 
+    $nombreCompleto = trim(sprintf('%s %s', $usuario->nombres, $usuario->apellidos));
+
+    return view('welcome', ['nombreCompleto' => $nombreCompleto]);
     return view('welcome', ['nombreCompleto' => $usuario->name]);
 });
